@@ -68,75 +68,14 @@ public function init():void {
 	
 }
 
-private function recClicked():void { 
-	if (rec_btn.selected) {
-		recordingTimer.start();
-		recordStart();
-	}
-	if (!rec_btn.selected) {
-		recordingTimer.stop();
-		recordFinished();
-	}
-}
-private function videoIsComplete():void {
-	playPauseBut.selected=true;
-	playPause();
-}
-private function thumbClicked(e:MouseEvent):void {
-	videoPlayer.playheadTime = position.value;	
-}
-public function stopVideo():void {
-	var s:String = myRecorder.server+myRecorder.fileName+".flv";
-	videoPlayer.source = s;
-	videoPlayer.stop();
-	playPauseBut.selected = false;
-}
-private function replay():void {
-	rec_btn.selected=false;
-	recClicked();
-	currentState="player";
-	var s:String = myRecorder.server+myRecorder.fileName+".flv";
-	videoPlayer.source = s;
-	// and start the video !
-	playPauseBut.selected=false;
-	playPause();
-}
-
-private function playPause():void{
-	if (playPauseBut.selected) {
-		videoPlayer.pause();
-	} else {
-		videoPlayer.play();
-	}
-}
-private function thumbPressed():void {
-	playPauseBut.selected=true;
-	videoPlayer.pause();
-}	
-
-
-private function thumbReleased():void {
-	videoPlayer.playheadTime = position.value;
-	return;
-		
-	videoPlayer.playheadTime = position.value;	
-	if (playPauseBut.selected) {
-		videoPlayer.pause();
-	} else {
-		videoPlayer.play();	
-	}
-}
-
  private function formatPositionToolTip(value:Number):String{
 	return value.toFixed(2) +" s";
  }
+
 private function handleGaugeEvent( event:GaugeEvent ) : void{	
 	videoPlayer.volume = event.value/100;
 }
-private function rollOut(e:MouseEvent):void {
-}
-private function rollOver(e:MouseEvent):void {
-} 
+
 private function netStatusHandler(event:NetStatusEvent):void {
 	switch (event.info.code) {
 	case "NetConnection.Connect.Failed":

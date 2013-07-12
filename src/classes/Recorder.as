@@ -6,7 +6,7 @@ package classes
 		public var fileName:String="video";
 		public var width:int=320;
 		public var height:int=240;
-		public var server:String="rtmp://127.0.0.1/red5recorder/";
+		public var server:String="rtmp://mathcentre.rayku.com/live/";
 		public var fps:int=15;
 		public var microRate:int=22;
 		public var showVolume:Boolean=true;
