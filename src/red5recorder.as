@@ -8,6 +8,7 @@ import flash.utils.Timer;
 
 import mx.controls.Alert;
 import mx.core.Application;
+import mx.core.FlexGlobals;
 
 
 NetConnection.defaultObjectEncoding = flash.net.ObjectEncoding.AMF3;
@@ -32,20 +33,20 @@ public function init():void {
 	myRecorder = new Recorder();
 	
 	// get parameters
-	if(Application.application.parameters.maxLength!=null) myRecorder.maxLength= Application.application.parameters.maxLength;
-	if(Application.application.parameters.fileName!=null) myRecorder.fileName = Application.application.parameters.fileName;
-	if(Application.application.parameters.width!=null) myRecorder.width= Application.application.parameters.width;
-	if(Application.application.parameters.height!=null) myRecorder.height= Application.application.parameters.height;
-	if(Application.application.parameters.server!=null) myRecorder.server= Application.application.parameters.server;
-	if(Application.application.parameters.fps!=null) myRecorder.fps= Application.application.parameters.fps;
-	if(Application.application.parameters.microRate!=null) myRecorder.microRate= Application.application.parameters.microRate;
-	if(Application.application.parameters.showVolume!=null) myRecorder.showVolume= Application.application.parameters.showVolume;
-	if(Application.application.parameters.recordingText!=null) myRecorder.recordingText= Application.application.parameters.recordingText;
-	if(Application.application.parameters.timeLeftText!=null) myRecorder.timeLeftText= Application.application.parameters.timeLeftText;
-	if(Application.application.parameters.timeLeft!=null) myRecorder.timeLeft= Application.application.parameters.timeLeft;
-	if(Application.application.parameters.mode!=null) myRecorder.mode= Application.application.parameters.mode;
-	if(Application.application.parameters.backToRecorder!=null) myRecorder.backToRecorder= Application.application.parameters.backToRecorder;
-	if(Application.application.parameters.backText!=null) myRecorder.backText= Application.application.parameters.backText;
+	if(FlexGlobals.topLevelApplication.parameters.maxLength!=null) myRecorder.maxLength= FlexGlobals.topLevelApplication.parameters.maxLength;
+	if(FlexGlobals.topLevelApplication.parameters.fileName!=null) myRecorder.fileName = FlexGlobals.topLevelApplication.parameters.fileName;
+	if(FlexGlobals.topLevelApplication.parameters.width!=null) myRecorder.width= FlexGlobals.topLevelApplication.parameters.width;
+	if(FlexGlobals.topLevelApplication.parameters.height!=null) myRecorder.height= FlexGlobals.topLevelApplication.parameters.height;
+	if(FlexGlobals.topLevelApplication.parameters.server!=null) myRecorder.server= FlexGlobals.topLevelApplication.parameters.server;
+	if(FlexGlobals.topLevelApplication.parameters.fps!=null) myRecorder.fps= FlexGlobals.topLevelApplication.parameters.fps;
+	if(FlexGlobals.topLevelApplication.parameters.microRate!=null) myRecorder.microRate= FlexGlobals.topLevelApplication.parameters.microRate;
+	if(FlexGlobals.topLevelApplication.parameters.showVolume!=null) myRecorder.showVolume= FlexGlobals.topLevelApplication.parameters.showVolume;
+	if(FlexGlobals.topLevelApplication.parameters.recordingText!=null) myRecorder.recordingText= FlexGlobals.topLevelApplication.parameters.recordingText;
+	if(FlexGlobals.topLevelApplication.parameters.timeLeftText!=null) myRecorder.timeLeftText= FlexGlobals.topLevelApplication.parameters.timeLeftText;
+	if(FlexGlobals.topLevelApplication.parameters.timeLeft!=null) myRecorder.timeLeft= FlexGlobals.topLevelApplication.parameters.timeLeft;
+	if(FlexGlobals.topLevelApplication.parameters.mode!=null) myRecorder.mode= FlexGlobals.topLevelApplication.parameters.mode;
+	if(FlexGlobals.topLevelApplication.parameters.backToRecorder!=null) myRecorder.backToRecorder= FlexGlobals.topLevelApplication.parameters.backToRecorder;
+	if(FlexGlobals.topLevelApplication.parameters.backText!=null) myRecorder.backText= FlexGlobals.topLevelApplication.parameters.backText;
 	
 	//Application.application.width = myRecorder.width;
 	//Application.application.height = myRecorder.height;
