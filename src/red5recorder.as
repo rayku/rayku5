@@ -19,7 +19,7 @@ public var ns:NetStream;					//
 public var camera:Camera;
 public var mic:Microphone;
 public var nsOutGoing:NetStream;
-//public var nsInGoing:NetStream;
+public var nsInGoing:NetStream;
 public const ROOMMODEL:String="models";
 [Bindable] public var myRecorder:Recorder;
 public var DEBUG:Boolean=false;
@@ -47,8 +47,8 @@ public function init():void {
 	if(Application.application.parameters.backToRecorder!=null) myRecorder.backToRecorder= Application.application.parameters.backToRecorder;
 	if(Application.application.parameters.backText!=null) myRecorder.backText= Application.application.parameters.backText;
 	
-	Application.application.width = myRecorder.width;
-	Application.application.height = myRecorder.height;
+	//Application.application.width = myRecorder.width;
+	//Application.application.height = myRecorder.height;
 
 	recordingTimer.addEventListener( "timer" , decrementTimer );
 
@@ -99,7 +99,7 @@ public function recordFinished():void {
 private  function decrementTimer( event:TimerEvent ):void {
 	var minutes:int;
 	var seconds:int;
-	myRecorder.timeLeft--;
+	//myRecorder.timeLeft--;
 	minutes = myRecorder.timeLeft / 60;
 	seconds = myRecorder.timeLeft % 60;
 	if (minutes<10) timeLeft="0"+ minutes+":" else timeLeft=minutes+":";
@@ -108,7 +108,7 @@ private  function decrementTimer( event:TimerEvent ):void {
 	
 	// format to display mm:ss format
 	if (myRecorder.timeLeft==0) {
-		recordFinished();
+		//recordFinished();
 	}
 }
 
@@ -121,33 +121,36 @@ private function drawMicLevel(evt:TimerEvent):void {
 }
 
 private  function prepareStreams():void {
-	nsOutGoing = new NetStream(nc); 
-	camera=Camera.getCamera();
-	if (camera==null) {
-		Alert.show("Webcam not detected !");
-	}
-	if (camera!=null) {
-		if (camera.muted) 	{
-			Security.showSettings(SecurityPanel.DEFAULT);
+	if (myRecorder.mode != "player") {
+		nsOutGoing = new NetStream(nc); 
+		camera=Camera.getCamera();
+		if (camera==null) {
+			Alert.show("Webcam not detected !");
 		}
-		camera.setMode(myRecorder.width,myRecorder.height,myRecorder.fps);
-		myWebcam.attachCamera(camera);
-		nsOutGoing.attachCamera(camera);
-		myRecorder.cameraDetected=true;
-		camera.addEventListener(StatusEvent.STATUS, cameraStatus); 
-	}	
-
-	mic=Microphone.getMicrophone(0);
-	if (mic!=null) {
-        mic.rate=myRecorder.microRate;
-        var timer:Timer=new Timer(50);
-		timer.addEventListener(TimerEvent.TIMER, drawMicLevel);
-		timer.start();
-		nsOutGoing.attachAudio(mic);
-	}	
-	//nsInGoing= new NetStream(nc);
-    //nsInGoing.client=this;    
-			            
+		if (camera!=null) {
+			if (camera.muted) 	{
+				Security.showSettings(SecurityPanel.DEFAULT);
+			}
+			camera.setMode(myRecorder.width,myRecorder.height,myRecorder.fps);
+			myWebcam.attachCamera(camera);
+			nsOutGoing.attachCamera(camera);
+			myRecorder.cameraDetected=true;
+			camera.addEventListener(StatusEvent.STATUS, cameraStatus); 
+		}	
+	
+		mic=Microphone.getMicrophone(0);
+		if (mic!=null) {
+	        mic.rate=myRecorder.microRate;
+	        var timer:Timer=new Timer(50);
+			timer.addEventListener(TimerEvent.TIMER, drawMicLevel);
+			timer.start();
+			nsOutGoing.attachAudio(mic);
+		}	
+	} else {
+		nsInGoing= new NetStream(nc);
+		nsInGoing.client=this;
+		nsInGoing.play(myRecorder.fileName);
+	}			            
 }   
 private function cameraStatus(evt:StatusEvent):void {
 	switch (evt.code) {

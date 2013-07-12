@@ -6,9 +6,9 @@
 			<mx:RemoveChild target="{micLevel}"/>
 			<mx:AddChild relativeTo="{canvas2}" position="lastChild">
 				<mx:Canvas label="player" width="100%" height="100%">
-							<mx:VideoDisplay id="videoPlayer"
-								 right="0" left="0" bottom="0" top="0"/>
-							<mx:Panel id="videoOptionsPanel" layout="absolute" verticalScrollPolicy="off" horizontalScrollPolicy="off" cornerRadius="5" roundedBottomCorners="true" backgroundColor="#DFDFDF" borderThicknessLeft="5" borderThicknessRight="5" borderThicknessTop="5" borderThicknessBottom="5" headerHeight="0" left="0" right="0" height="40" alpha="0.8" bottom="0" borderStyle="solid" backgroundAlpha="0.6">    
+							<mx:VideoDisplay id="videoPlayer" live="true"
+								 right="0" left="0" bottom="0" top="0" width="100%" height="100%" maintainAspectRatio="true"/>
+							<mx:Panel id="videoOptionsPanel" layout="absolute" verticalScrollPolicy="off" horizontalScrollPolicy="off" backgroundColor="#DFDFDF" borderThicknessLeft="5" borderThicknessRight="5" borderThicknessTop="5" borderThicknessBottom="5" headerHeight="0" left="0" right="0" height="20" alpha="0.3" bottom="0" borderStyle="solid" backgroundAlpha="0.3">    
 							
 								<gauge:Gauge id="volume" gaugeClick="handleGaugeEvent(event)" liveDragging="true" right="-1" bottom="0" width="40" height="20" needleThickness="0.3" coverColor="#0000FF" coverAlpha="0.8" 
 									coverDropShadowEnabled="false" />
@@ -21,7 +21,7 @@
 <mx:Style source="style.css" />
 
 		<mx:Canvas label="recorder" width="100%" height="100%" verticalScrollPolicy="off" horizontalScrollPolicy="off" id="canvas2">
-			<mx:VideoDisplay id="myWebcam" left="0" top="0" bottom="16" right="0"/>
+			<mx:VideoDisplay id="myWebcam" left="0" top="0" bottom="16" right="0" width="100%" height="100%" maintainAspectRatio="true"/>
 			<mx:ProgressBar label="volume" labelPlacement="center" minimum="0" maximum="100" id="micLevel" mode="manual" visible="{myRecorder.showVolume}" bottom="0" right="0" left="0"/>
 		</mx:Canvas>
 		
