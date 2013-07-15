@@ -6,7 +6,7 @@
 			<mx:RemoveChild target="{micLevel}"/>
 			<mx:AddChild relativeTo="{canvas2}" position="lastChild">
 				<mx:Canvas label="player" width="100%" height="100%">
-							<mx:VideoDisplay id="videoPlayer" live="true"
+							<mx:VideoDisplay id="videoPlayer" live="{myRecorder.live}"
 								 right="0" left="0" bottom="0" top="0" width="100%" height="100%" maintainAspectRatio="true"/>
 							<mx:Panel id="videoOptionsPanel" layout="absolute" verticalScrollPolicy="off" horizontalScrollPolicy="off" backgroundColor="#DFDFDF" borderThicknessLeft="5" borderThicknessRight="5" borderThicknessTop="5" borderThicknessBottom="5" headerHeight="0" left="0" right="0" height="20" alpha="0.3" bottom="0" borderStyle="solid" backgroundAlpha="0.3">    
 							

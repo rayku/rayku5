@@ -18,6 +18,7 @@ package classes
 		public var backToRecorder:Boolean=true;
 		public var backText:String="Back";
 		public var cameraDetected:Boolean=false;
+		public var live:Boolean=true;
 		
 		public function Recorder()
 		{	timeLeft = maxLength;

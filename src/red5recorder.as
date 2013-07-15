@@ -3,12 +3,14 @@ import classes.Recorder;
 
 import components.gauge.events.GaugeEvent;
 
+import flash.external.*;
 import flash.media.Camera;
 import flash.utils.Timer;
 
 import mx.controls.Alert;
 import mx.core.Application;
 import mx.core.FlexGlobals;
+import mx.core.mx_internal;
 
 
 NetConnection.defaultObjectEncoding = flash.net.ObjectEncoding.AMF3;
@@ -47,17 +49,22 @@ public function init():void {
 	if(FlexGlobals.topLevelApplication.parameters.mode!=null) myRecorder.mode= FlexGlobals.topLevelApplication.parameters.mode;
 	if(FlexGlobals.topLevelApplication.parameters.backToRecorder!=null) myRecorder.backToRecorder= FlexGlobals.topLevelApplication.parameters.backToRecorder;
 	if(FlexGlobals.topLevelApplication.parameters.backText!=null) myRecorder.backText= FlexGlobals.topLevelApplication.parameters.backText;
+	if(FlexGlobals.topLevelApplication.parameters.live!=null) myRecorder.live = FlexGlobals.topLevelApplication.parameters.live;
 	
 	//Application.application.width = myRecorder.width;
 	//Application.application.height = myRecorder.height;
 
-	recordingTimer.addEventListener( "timer" , decrementTimer );
+	//recordingTimer.addEventListener( "timer" , decrementTimer );
 
 	timeLeft = myRecorder.maxLength.toString();
   	nc=new NetConnection();		
 	nc.client=this;		
 	nc.addEventListener(NetStatusEvent.NET_STATUS,netStatusHandler);
 	nc.connect(myRecorder.server);	
+	
+	ExternalInterface.addCallback("play", playRecording);
+	ExternalInterface.addCallback("startRecording", recordStart);
+	ExternalInterface.addCallback("stopRecording", recordFinished);
 
 	
 	
@@ -116,6 +123,13 @@ private  function decrementTimer( event:TimerEvent ):void {
 public function webcamParameters():void {
 	Security.showSettings(SecurityPanel.DEFAULT);
 }
+
+public function playRecording():void {
+	if (myRecorder.mode == "player") {
+		nsInGoing.play(myRecorder.fileName);
+	}
+}
+
 private function drawMicLevel(evt:TimerEvent):void {
 		var ac:int=mic.activityLevel;
 		micLevel.setProgress(ac,100);
@@ -149,8 +163,8 @@ private  function prepareStreams():void {
 		}	
 	} else {
 		nsInGoing= new NetStream(nc);
-		nsInGoing.client=this;
-		nsInGoing.play(myRecorder.fileName);
+		videoPlayer.mx_internal::videoPlayer.attachNetStream(nsInGoing);
+		videoPlayer.mx_internal::videoPlayer.visible = true;
 	}			            
 }   
 private function cameraStatus(evt:StatusEvent):void {
