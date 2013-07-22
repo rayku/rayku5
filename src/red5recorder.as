@@ -11,6 +11,7 @@ import mx.controls.Alert;
 import mx.core.Application;
 import mx.core.FlexGlobals;
 import mx.core.mx_internal;
+import mx.events.CloseEvent;
 
 
 NetConnection.defaultObjectEncoding = flash.net.ObjectEncoding.AMF3;
@@ -56,6 +57,8 @@ public function init():void {
 
 	//recordingTimer.addEventListener( "timer" , decrementTimer );
 
+	//webcamParameters();
+	
 	timeLeft = myRecorder.maxLength.toString();
   	nc=new NetConnection();		
 	nc.client=this;		
@@ -70,10 +73,16 @@ public function init():void {
 	
 	if (myRecorder.mode=="player") {
 		currentState="player";
+		flash.external.ExternalInterface.call("namespace.rayku.chatbox.views.webcam.loaded");
 	} else {
 		currentState="";
 	}
 	
+	if (myRecorder.mode!="player") {
+		var alert:Alert = mx.controls.Alert.show('Click "OK" to continue.', 'Thanks!', mx.controls.Alert.OK, null, function(e:CloseEvent):void {
+			flash.external.ExternalInterface.call("namespace.rayku.chatbox.views.webcam.prepared");
+		});
+	}
 }
 
  private function formatPositionToolTip(value:Number):String{
@@ -121,7 +130,7 @@ private  function decrementTimer( event:TimerEvent ):void {
 }
 
 public function webcamParameters():void {
-	Security.showSettings(SecurityPanel.DEFAULT);
+	Security.showSettings(SecurityPanel.PRIVACY);
 }
 
 public function playRecording():void {
