@@ -12,7 +12,7 @@ import mx.core.Application;
 import mx.core.FlexGlobals;
 import mx.core.mx_internal;
 import mx.events.CloseEvent;
-
+import mx.events.VideoEvent;
 
 NetConnection.defaultObjectEncoding = flash.net.ObjectEncoding.AMF3;
 SharedObject.defaultObjectEncoding  = flash.net.ObjectEncoding.AMF3;
@@ -27,7 +27,6 @@ public var nsInGoing:NetStream;
 public const ROOMMODEL:String="models";
 [Bindable] public var myRecorder:Recorder;
 public var DEBUG:Boolean=false;
-public var recordingTimer:Timer = new Timer( 1000 , 0 );
 [Bindable] public var timeLeft:String="";
 
 
@@ -51,13 +50,7 @@ public function init():void {
 	if(FlexGlobals.topLevelApplication.parameters.backToRecorder!=null) myRecorder.backToRecorder= FlexGlobals.topLevelApplication.parameters.backToRecorder;
 	if(FlexGlobals.topLevelApplication.parameters.backText!=null) myRecorder.backText= FlexGlobals.topLevelApplication.parameters.backText;
 	if(FlexGlobals.topLevelApplication.parameters.live!=null) myRecorder.live = FlexGlobals.topLevelApplication.parameters.live;
-	
-	//Application.application.width = myRecorder.width;
-	//Application.application.height = myRecorder.height;
-
-	//recordingTimer.addEventListener( "timer" , decrementTimer );
-
-	//webcamParameters();
+	j
 	
 	timeLeft = myRecorder.maxLength.toString();
   	nc=new NetConnection();		
@@ -73,7 +66,6 @@ public function init():void {
 	
 	if (myRecorder.mode=="player") {
 		currentState="player";
-		flash.external.ExternalInterface.call("namespace.rayku.chatbox.views.webcam.loaded");
 	} else {
 		currentState="";
 	}
@@ -107,26 +99,11 @@ private function netStatusHandler(event:NetStatusEvent):void {
     }
 }
 public function recordStart():void {
-	nsOutGoing.publish(myRecorder.fileName, "record");
+	nsOutGoing.publish(myRecorder.fileName, "append");
 	myRecorder.hasRecorded = true;
 }
 public function recordFinished():void {
 	nsOutGoing.close();
-}
-private  function decrementTimer( event:TimerEvent ):void {
-	var minutes:int;
-	var seconds:int;
-	//myRecorder.timeLeft--;
-	minutes = myRecorder.timeLeft / 60;
-	seconds = myRecorder.timeLeft % 60;
-	if (minutes<10) timeLeft="0"+ minutes+":" else timeLeft=minutes+":";
-	if (seconds<10) timeLeft=timeLeft+"0"+ seconds else timeLeft=timeLeft+seconds;
-
-	
-	// format to display mm:ss format
-	if (myRecorder.timeLeft==0) {
-		//recordFinished();
-	}
 }
 
 public function webcamParameters():void {
@@ -174,8 +151,10 @@ private  function prepareStreams():void {
 		nsInGoing= new NetStream(nc);
 		videoPlayer.mx_internal::videoPlayer.attachNetStream(nsInGoing);
 		videoPlayer.mx_internal::videoPlayer.visible = true;
+		flash.external.ExternalInterface.call("namespace.rayku.chatbox.views.webcam.loaded");
 	}			            
 }   
+
 private function cameraStatus(evt:StatusEvent):void {
 	switch (evt.code) {
 	case "Camera.Muted":
