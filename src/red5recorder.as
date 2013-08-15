@@ -50,7 +50,6 @@ public function init():void {
 	if(FlexGlobals.topLevelApplication.parameters.backToRecorder!=null) myRecorder.backToRecorder= FlexGlobals.topLevelApplication.parameters.backToRecorder;
 	if(FlexGlobals.topLevelApplication.parameters.backText!=null) myRecorder.backText= FlexGlobals.topLevelApplication.parameters.backText;
 	if(FlexGlobals.topLevelApplication.parameters.live!=null) myRecorder.live = FlexGlobals.topLevelApplication.parameters.live;
-	j
 	
 	timeLeft = myRecorder.maxLength.toString();
   	nc=new NetConnection();		
