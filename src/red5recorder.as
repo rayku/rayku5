@@ -58,6 +58,7 @@ public function init():void {
 	nc.connect(myRecorder.server);	
 	
 	ExternalInterface.addCallback("play", playRecording);
+	ExternalInterface.addCallback("stop", stopRecording);
 	ExternalInterface.addCallback("startRecording", recordStart);
 	ExternalInterface.addCallback("stopRecording", recordFinished);
 
@@ -112,6 +113,12 @@ public function webcamParameters():void {
 public function playRecording():void {
 	if (myRecorder.mode == "player") {
 		nsInGoing.play(myRecorder.fileName);
+	}
+}
+
+public function stopRecording():void {
+	if (myRecorder.mode == "player") {
+		nsInGoing.close();
 	}
 }
 
