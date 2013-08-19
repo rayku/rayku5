@@ -125,7 +125,7 @@ public function stopRecording():void {
 
 public function pauseToggle():void {
 	if (myRecorder.mode == "player") {
-		nsInGoing.pause();
+		nsInGoing.togglePause();
 	}
 }
 
