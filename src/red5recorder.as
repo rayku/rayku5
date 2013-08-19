@@ -59,6 +59,7 @@ public function init():void {
 	
 	ExternalInterface.addCallback("play", playRecording);
 	ExternalInterface.addCallback("stop", stopRecording);
+	ExternalInterface.addCallback("pause", pauseToggle);
 	ExternalInterface.addCallback("startRecording", recordStart);
 	ExternalInterface.addCallback("stopRecording", recordFinished);
 
@@ -122,6 +123,12 @@ public function stopRecording():void {
 	}
 }
 
+public function pauseToggle():void {
+	if (myRecorder.mode == "player") {
+		nsInGoing.pause();
+	}
+}
+
 private function drawMicLevel(evt:TimerEvent):void {
 		var ac:int=mic.activityLevel;
 		micLevel.setProgress(ac,100);
@@ -151,6 +158,7 @@ private  function prepareStreams():void {
 	        var timer:Timer=new Timer(50);
 			timer.addEventListener(TimerEvent.TIMER, drawMicLevel);
 			timer.start();
+			mic.setSilenceLevel(0, -1);
 			nsOutGoing.attachAudio(mic);
 		}	
 	} else {
