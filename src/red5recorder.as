@@ -63,8 +63,8 @@ public function init():void {
 	ExternalInterface.addCallback("pause", pauseToggle);
 	ExternalInterface.addCallback("startRecording", recordStart);
 	ExternalInterface.addCallback("stopRecording", recordFinished);
-
-	
+	ExternalInterface.addCallback("mute", mute);
+	ExternalInterface.addCallback("unMute", unMute);
 	
 	if (myRecorder.mode=="player") {
 		currentState="player";
@@ -136,6 +136,18 @@ public function stopRecording():void {
 public function pauseToggle():void {
 	if (myRecorder.mode == "player") {
 		nsInGoing.togglePause();
+	}
+}
+
+public function mute():void {
+	if (myRecorder.mode == "player"){
+		nsInGoing.receiveAudio(false);
+	}
+}
+
+public function unMute():void {
+	if (myRecorder.mode == "player"){
+		nsInGoing.receiveAudio(true);
 	}
 }
 
