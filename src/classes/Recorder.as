@@ -6,7 +6,7 @@ package classes
 		public var fileName:String="1";
 		public var width:int=320;
 		public var height:int=240;
-		public var server:String="rtmp://mathcentre.rayku.com/live/whiteboard/Host";
+		public var server:String="rtmp://mathcentre.rayku.com:80/live/whiteboard/Tutor";
 		public var fps:int=15;
 		public var microRate:int=22;
 		public var showVolume:Boolean=true;

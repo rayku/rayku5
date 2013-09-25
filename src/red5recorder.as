@@ -1,9 +1,5 @@
 // ActionScript file
-import classes.Recorder;
-
-import components.gauge.events.GaugeEvent;
-
-import flash.external.*;
+import flash.external.ExternalInterface;
 import flash.media.Camera;
 import flash.utils.Timer;
 
@@ -13,6 +9,10 @@ import mx.core.FlexGlobals;
 import mx.core.mx_internal;
 import mx.events.CloseEvent;
 import mx.events.VideoEvent;
+
+import classes.Recorder;
+
+import components.gauge.events.GaugeEvent;
 
 NetConnection.defaultObjectEncoding = flash.net.ObjectEncoding.AMF3;
 SharedObject.defaultObjectEncoding  = flash.net.ObjectEncoding.AMF3;
@@ -28,6 +28,7 @@ public const ROOMMODEL:String="models";
 [Bindable] public var myRecorder:Recorder;
 public var DEBUG:Boolean=false;
 [Bindable] public var timeLeft:String="";
+private var isReconnect:Boolean=false;
 
 
 
@@ -72,8 +73,9 @@ public function init():void {
 	}
 	
 	if (myRecorder.mode!="player") {
-		var alert:Alert = mx.controls.Alert.show('Click "OK" to continue.', 'Thanks!', mx.controls.Alert.OK, null, function(e:CloseEvent):void {
+		var alert:Alert = mx.controls.Alert.show('Click "OK" to continue.', 'Webcam Settings', mx.controls.Alert.OK, null, function(e:CloseEvent):void {
 			flash.external.ExternalInterface.call("namespace.rayku.chatbox.views.webcam.prepared");
+			recordStart();
 		});
 	}
 }
@@ -88,17 +90,25 @@ private function handleGaugeEvent( event:GaugeEvent ) : void{
 
 private function netStatusHandler(event:NetStatusEvent):void {
 	switch (event.info.code) {
-	case "NetConnection.Connect.Failed":
-		Alert.show("ERROR:Could not connect to: "+myRecorder.server);
-	break;	
     case "NetConnection.Connect.Success":
     	prepareStreams();
     break;
 	default:
-		nc.close();
-		break;
+		setTimeout(reconnect, 2000);
+	break;
     }
 }
+
+private function reconnect():void {
+	isReconnect = true;
+	if (myRecorder.mode == 'player'){
+		nsInGoing.close();
+	} else {
+		nsOutGoing.close();
+	}
+	nc.connect(myRecorder.server);
+}
+
 public function recordStart():void {
 	nsOutGoing.publish(myRecorder.fileName, "append");
 	myRecorder.hasRecorded = true;
@@ -136,7 +146,11 @@ private function drawMicLevel(evt:TimerEvent):void {
 
 private  function prepareStreams():void {
 	if (myRecorder.mode != "player") {
-		nsOutGoing = new NetStream(nc); 
+		if (!isReconnect){
+			nsOutGoing = new NetStream(nc); 
+		} else {
+			nsOutGoing = new NetStream(nc);
+		}
 		camera=Camera.getCamera();
 		if (camera==null) {
 			Alert.show("Webcam not detected !");
@@ -161,11 +175,21 @@ private  function prepareStreams():void {
 			mic.setSilenceLevel(0, -1);
 			nsOutGoing.attachAudio(mic);
 		}	
+		if (isReconnect){
+			recordStart();
+		}
 	} else {
-		nsInGoing= new NetStream(nc);
-		videoPlayer.mx_internal::videoPlayer.attachNetStream(nsInGoing);
-		videoPlayer.mx_internal::videoPlayer.visible = true;
-		flash.external.ExternalInterface.call("namespace.rayku.chatbox.views.webcam.loaded");
+		if (!isReconnect){
+			nsInGoing= new NetStream(nc);
+			videoPlayer.mx_internal::videoPlayer.attachNetStream(nsInGoing);
+			videoPlayer.mx_internal::videoPlayer.visible = true;
+			flash.external.ExternalInterface.call("namespace.rayku.chatbox.views.webcam.loaded");
+		} else {
+			nsInGoing= new NetStream(nc);
+			videoPlayer.mx_internal::videoPlayer.attachNetStream(nsInGoing);
+			videoPlayer.mx_internal::videoPlayer.visible = true;
+			nsInGoing.play(myRecorder.fileName);
+		}
 	}			            
 }   
 
